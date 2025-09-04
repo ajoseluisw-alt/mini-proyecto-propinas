@@ -4,35 +4,60 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calculadora de propinas</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin: 0; background: #f6f7f9; min-height: 100vh; display: grid; place-items: center; }
+    .card { background: #fff; width: 100%; max-width: 420px; padding: 20px; border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+    h1 { margin: 0 0 12px; font-size: 1.25rem; }
+    label { display:block; margin: 12px 0 6px; color:#333; }
+    input, select, button {
+      width: 100%; padding: 10px 12px; border:1px solid #d7dbe2; border-radius:10px; font-size: 1rem;
+    }
+    input:focus, select:focus { outline: none; border-color:#8aa4ff; box-shadow: 0 0 0 3px rgba(138,164,255,.15); }
+    button { margin-top: 14px; cursor: pointer; border: none; background: #4c6fff; color: #fff; font-weight: 600; }
+    button:hover { filter: brightness(1.05); }
+    #resultado { margin-top: 14px; padding: 12px; background:#f2f5ff; border:1px solid #dbe2ff; border-radius:10px; }
+  </style>
 </head>
 <body>
-  <h1>Calculadora de propinas</h1>
+  <div class="card">
+    <h1>Calculadora de propinas</h1>
 
-  <label for="monto">Cuenta (CLP):</label>
-  <input id="monto" type="number" placeholder="Ej: 18500" />
+    <label for="monto">Cuenta (CLP):</label>
+    <input id="monto" type="number" placeholder="Ej: 18500" />
 
-  <label for="porc">Propina:</label>
-  <select id="porc">
-    <option value="0.1">10%</option>
-    <option value="0.12">12%</option>
-    <option value="0.15" selected>15%</option>
-  </select>
+    <label for="porc">Propina:</label>
+    <select id="porc">
+      <option value="0.1">10%</option>
+      <option value="0.12">12%</option>
+      <option value="0.15" selected>15%</option>
+    </select>
 
-  <button id="calcular">Calcular</button>
+    <button id="calcular">Calcular</button>
 
-  <div id="resultado" style="margin-top:1rem"></div>
+    <div id="resultado" hidden></div>
+  </div>
 
   <script>
     const fmt = new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP' });
+    const out = document.getElementById('resultado');
+
     document.getElementById('calcular').addEventListener('click', () => {
       const monto = parseFloat(document.getElementById('monto').value);
       const porc  = parseFloat(document.getElementById('porc').value);
+
       if (isNaN(monto) || monto <= 0) {
-        document.getElementById('resultado').textContent = 'Ingresa un monto válido.'; return;
+        out.hidden = false;
+        out.textContent = 'Ingresa un monto válido.';
+        return;
       }
+
       const propina = Math.round(monto * porc);
       const total   = monto + propina;
-      document.getElementById('resultado').innerHTML =
+
+      out.hidden = false;
+      out.innerHTML =
         `<p>Propina: <strong>${fmt.format(propina)}</strong></p>
          <p>Total a pagar: <strong>${fmt.format(total)}</strong></p>`;
     });
