@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora de propinas</title>
+</head>
+<body>
+  <h1>Calculadora de propinas</h1>
+
+  <label for="monto">Cuenta (CLP):</label>
+  <input id="monto" type="number" placeholder="Ej: 18500" />
+
+  <label for="porc">Propina:</label>
+  <select id="porc">
+    <option value="0.1">10%</option>
+    <option value="0.12">12%</option>
+    <option value="0.15" selected>15%</option>
+  </select>
+
+  <button id="calcular">Calcular</button>
+
+  <div id="resultado" style="margin-top:1rem"></div>
+
+  <script>
+    const fmt = new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP' });
+    document.getElementById('calcular').addEventListener('click', () => {
+      const monto = parseFloat(document.getElementById('monto').value);
+      const porc  = parseFloat(document.getElementById('porc').value);
+      if (isNaN(monto) || monto <= 0) {
+        document.getElementById('resultado').textContent = 'Ingresa un monto válido.'; return;
+      }
+      const propina = Math.round(monto * porc);
+      const total   = monto + propina;
+      document.getElementById('resultado').innerHTML =
+        `<p>Propina: <strong>${fmt.format(propina)}</strong></p>
+         <p>Total a pagar: <strong>${fmt.format(total)}</strong></p>`;
+    });
+  </script>
+</body>
+</html>
